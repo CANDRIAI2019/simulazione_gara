@@ -1,53 +1,29 @@
 #pragma optimize ("O3")
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+using si = int;
 
-using ull = unsigned long long;
-using vi = vector<int>;
-const int MAXN=1000000;
+ifstream fin{"input.txt"};
+ofstream fout{"output.txt"};
+vector<si> d,res;
+si N,sum,i=-1;
 
-ifstream in{"input.txt"};
-ofstream out{"output.txt"};
-int n; vi h;
-bitset<MAXN> cad;
-vector<int> risp;
-
-int main(){
-    cad.reset();
-    in>>n;
-    h.resize(n);
-    for(int i=0;i<n;i++)
-        in>>h[i],
-        h[i]--;
-    h.push_back(0);
-    int s1=0;
-    for(int i=0;i<n;i++){
-        int i0=i;
-        int l=h[i]+i;
-        while(i<l){
-            i++;
-            if(i==n){
-                i--;
-                break;
-            }
-            l=max(l,h[i]+i);
-        }
-        s1=(i-i0+1);
-        risp.push_back(s1);
+si group(si& i){
+    si power=d[i]-1,c=1;
+    while(power>=1 && i<N){
+        power=max(d[++i],power)-1;
+        if(i<N) c++;
     }
-    sort(risp.rbegin(),risp.rend());
-    int p=0;
-    for(auto r :risp){
-        p+=r;
-        if(p>n)break;
-        out<<p<<" ";
-    }
+    return c;
+}
 
-    int nPr= risp.size();
-    while(nPr<n){
-        nPr++;
-        out<<n<<" ";
-    }
-    out<<endl;
-    return 0;
+main(){
+    fin>>N;
+    d.resize(N);
+    for (auto& el : d) fin>>el;
+    while(i<N-1) res.push_back(group(++i));
+    sort(res.rbegin(),res.rend());
+    res.resize(N,0);
+    for (auto& el : res) fout<<(sum+=el)<<" ";
+    fout<<endl;
 }
